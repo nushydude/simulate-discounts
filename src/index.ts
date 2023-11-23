@@ -1,4 +1,4 @@
-const simulateDiscounts = require('./simulateDiscounts');
+import simulateDiscounts from './simulateDiscounts';
 
 console.log('N = 1, K = 1', simulateDiscounts(1, 1));
 console.log('N = 5, K = 10', simulateDiscounts(5, 10));

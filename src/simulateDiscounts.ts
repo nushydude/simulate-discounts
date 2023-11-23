@@ -65,4 +65,4 @@ function simulateDiscounts(N: number, K: number): ReturnType {
   };
 }
 
-module.exports = simulateDiscounts;
+export default simulateDiscounts;

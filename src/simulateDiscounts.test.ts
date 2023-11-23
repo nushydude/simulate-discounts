@@ -1,4 +1,4 @@
-const simulateDiscounts = require('./simulateDiscounts');
+import simulateDiscounts from './simulateDiscounts';
 
 describe('simulateDiscounts', () => {
   describe('Given N is less than 1', () => {
