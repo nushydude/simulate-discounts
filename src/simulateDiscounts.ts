@@ -3,9 +3,13 @@ interface ReturnType {
   customerIDsForStandardDiscount: number[];
 }
 
+/**
+ * Simulate discounts for N customers with K customers getting double discount.
+ * @param N Number of customers
+ * @param K How many customers to skip at a time for the randomisation logic to work
+ * @returns An object containing the customer ID for double discount and an array of customer IDs for standard discount in the order they were given the discounts.
+ */
 function simulateDiscounts(N: number, K: number): ReturnType {
-  const customerIDsForStandardDiscount: number[] = [];
-
   // Input validation
   if (N <= 0) {
     throw new Error('N should be larger than 0');
@@ -16,6 +20,8 @@ function simulateDiscounts(N: number, K: number): ReturnType {
   } else if (!Number.isInteger(K)) {
     throw new Error('K should be an integer');
   }
+
+  const customerIDsForStandardDiscount: number[] = [];
 
   // Initialise a customer IDs list to loop over
   const customerIDs = Array.from({ length: N }, (_, id) => id + 1);
@@ -30,25 +36,28 @@ function simulateDiscounts(N: number, K: number): ReturnType {
   // Since we stop when customerIDs are below 2,
   // the one that is left at the end is the one with double discount.
   while (customerIDs.length > 1) {
-    // Assumption: There is a little ambiguity here. It says
-    // "skips K customers and applies discount to the Kth customer
-    // and they are removed from the list."
-    // I am assuming that the customer ID at curIndex is included in the skipped IDs.
+    // Calculate the index of the customerID to delete.
+    // We would need to do a mod operation because we might go out of bounds of the customerIDs array.
+    // In that case, what this does it that it loops back to the beginning of the array and continues from there.
+    // This also handles multiple loops, eg: if we have 5 customerIDs and K is 2, we would loop over twice.
+    // The mod operation would be an extra operation when the looping doesn't occur, however instead of conditionally
+    // applying this logic, we can just apply it all the time to make it look cleaner.
+    const indexOfTheContactIDToDelete = (curIndex + K) % customerIDs.length;
 
-    // We would take the mod of curIndex + K with the length of the array to get the next index,
-    // because we might loop over several times if we run out array bounds.
-    // This works when we do not run out of bounds as well, although the modding part is unnecessary.
-    // But this makes the code sleeker.
-    const nextIndex = (curIndex + K) % customerIDs.length;
+    // Delete the contact ID from the array which returns an array of the deleted contact ID, which is an array of length 1 in this case.
+    const deletedCustomerIDs = customerIDs.splice(
+      indexOfTheContactIDToDelete,
+      1
+    );
 
-    // Delete the item from array
-    const deletedCustomerIDs = customerIDs.splice(nextIndex, 1);
-
+    // Store the deleted contact ID in the array of customer IDs for standard discount.
     customerIDsForStandardDiscount.push(deletedCustomerIDs[0]);
 
-    // Decrement nextIndex by 1 and set it to curIndex.
-    // In case we are at the beginning of the array, we need to loop back to the end.
-    curIndex = (nextIndex - 1 + customerIDs.length) % customerIDs.length;
+    // Decrement indexOfTheContactIDToDelete by 1 and set it to curIndex to begin the next iteraction.
+    // In case we are at the beginning of the array, we need to loop back to the end, hence the mod operation.
+    curIndex =
+      (indexOfTheContactIDToDelete - 1 + customerIDs.length) %
+      customerIDs.length;
   }
 
   return {
