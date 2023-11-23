@@ -2,11 +2,13 @@
   "name": "discount-simulator",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "engines": {
     "node": ">=16.17.0"
   },
   "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "prepare": "husky install"
   },
