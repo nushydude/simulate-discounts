@@ -1,7 +1,3 @@
-// add all jest-extended matchers
-import * as matchers from "jest-extended";
-expect.extend(matchers);
+import * as matchers from 'jest-extended';
 
-// or just add specific matchers
-import { toBeArray, toBeSealed } from "jest-extended";
-expect.extend({ toBeArray, toBeSealed });
+expect.extend(matchers);
