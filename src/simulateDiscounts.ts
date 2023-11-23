@@ -31,19 +31,17 @@ function simulateDiscounts(N: number, K: number): ReturnType {
   // the one that is left at the end is the one with double discount.
   while (customerIDs.length > 1) {
     // Assumption: There is a little ambiguity here. It says
-    // "skips K customers and applies discount to the Kth customer and they are removed from the list."
-    let nextIndex = curIndex + K;
+    // "skips K customers and applies discount to the Kth customer
+    // and they are removed from the list."
+    // I am assuming that the customer ID at curIndex is included in the skipped IDs.
 
-    if (nextIndex >= customerIDs.length) {
-      // If we are going out of bounds of the array
-      // we need to get the mod (or the remainder) because if K is large enough -
-      // especially once we have deleted many customer IDs
-      // we will need to loop multiple times to land on the nextIndex.
-      // This should work if we don't loop multiple times as well.
-      nextIndex = (curIndex + K) % customerIDs.length;
-    }
+    // We would take the mod of curIndex + K with the length of the array to get the next index,
+    // because we might loop over several times if we run out array bounds.
+    // This works when we do not run out of bounds as well, although the modding part is unnecessary.
+    // But this makes the code sleeker.
+    const nextIndex = (curIndex + K) % customerIDs.length;
 
-    // delete the item from array
+    // Delete the item from array
     const deletedCustomerIDs = customerIDs.splice(nextIndex, 1);
 
     customerIDsForStandardDiscount.push(deletedCustomerIDs[0]);
