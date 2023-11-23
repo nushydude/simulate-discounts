@@ -48,15 +48,9 @@ function simulateDiscounts(N: number, K: number): ReturnType {
 
     customerIDsForStandardDiscount.push(deletedCustomerIDs[0]);
 
-    // decrement nextIndex by 1 and set it to curIndex
-    if (nextIndex === 0) {
-      // if we are currently on 0th array index,
-      // move to last item in the array
-      curIndex = customerIDs.length - 1;
-    } else {
-      // otherwise, decrement index by 1
-      curIndex = nextIndex - 1;
-    }
+    // Decrement nextIndex by 1 and set it to curIndex.
+    // In case we are at the beginning of the array, we need to loop back to the end.
+    curIndex = (nextIndex - 1 + customerIDs.length) % customerIDs.length;
   }
 
   return {
